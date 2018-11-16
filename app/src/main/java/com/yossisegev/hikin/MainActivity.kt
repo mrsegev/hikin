@@ -1,6 +1,7 @@
 package com.yossisegev.hikin
 
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.yossisegev.hikin.kin.KinAccountManager
@@ -16,22 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportFragmentManager.beginTransaction().replace(R.id.container, MainFragment()).commitNow()
 
-        val accountManager = KinAccountManager(this, "YO3S")
-        accountManager.getAccountOrCreate({
-            Log.d(TAG, it.publicAddress)
-            val commons = KinCommons(it)
-
-            commons.getBalance({
-                Log.d(TAG, it.value().toPlainString())
-                commons.sendKin(recipient, 3.5, "testing 123", {
-                    Log.d(TAG, "TxId: " + it.id())
-
-                    commons.getBalance({
-                        Log.d(TAG, it.value().toPlainString())
-                    })
-                })
-            })
-        })
     }
 }
